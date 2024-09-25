@@ -4,6 +4,8 @@ class SigninController extends GetxController {
   //TODO: Implement SigninController
 
   final count = 0.obs;
+
+  var isChecked = false.obs;
   @override
   void onInit() {
     super.onInit();
