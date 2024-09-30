@@ -14,11 +14,9 @@ class HomeView extends GetView<HomeController> {
         title: Text(F.title),
         centerTitle: true,
       ),
-      body: const Center(
-        child: Text(
-          'HomeView orking',
-          style: TextStyle(fontSize: 20),
-        ),
+      body: Center(
+        child: Obx(() =>
+            Column(children: controller.orgNames.map((f) => Text(f)).toList())),
       ),
     );
   }

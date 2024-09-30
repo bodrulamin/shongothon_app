@@ -1,10 +1,12 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:get/get_navigation/src/root/get_material_app.dart';
+import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
+import 'package:shongothon/app/data/auth_service.dart';
 import 'package:shongothon/app/routes/app_pages.dart';
-import 'app.dart';
 
 FutureOr<void> main() async {
+  Get.put(ApiService());
   runApp(
     GetMaterialApp(
       title: "Application",
