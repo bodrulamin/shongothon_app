@@ -6,14 +6,59 @@ class HomeController extends GetxController {
 
   final count = 0.obs;
 
-  var orgNames = [].obs; // Observable list to store organization names  @override
-  void onInit() {
+  var organizations = {}.obs;
+
+  var currentIndex = 0.obs; // Observable list to store organization names  @override
+  Future<void> onInit() async {
+    await fetchData();
     super.onInit();
-    Get.find<ApiService>().fetchOrganizations().then((response) {
-      print(response.body);
-      var names =
-          response.body.map((org) => org['name']).toList();
-      orgNames.value = names;
+
+  }
+
+  Future<void> fetchData() async {
+    organizations.value = {}.obs;
+
+    var response = await Get.find<ApiService>().fetchAccount();
+    var account = response.body;
+    var id = account['id'];
+    
+    Get.find<ApiService>().fetchUsergroups(id.toString()).then((response) {
+      
+      var userGroups = response.body.map((data) {
+        var userGroupName = data['userGroup']['name'];
+        var organizationName = data['userGroup']['organization']['name'];
+        var organizationLogoUrl = data['userGroup']['organization']['logoUrl'];
+        var branchName = data['userGroup']['branch']['name'];
+    
+        return {
+          'userGroupName': userGroupName,
+          'organizationName': organizationName,
+          'organizationLogoUrl': organizationLogoUrl,
+          'branchName': branchName,
+          // 'parentBranchName': parentBranchName
+        };
+      }).toList();
+      Map<String, Map<String, dynamic>> groupedData = {};
+    
+      for (var userGroup in userGroups) {
+        var orgName = userGroup['organizationName'];
+        var logoUrl = userGroup['organizationLogoUrl'];
+        var branchName = userGroup['branchName'];
+    
+        if (!groupedData.containsKey(orgName)) {
+          // If organization is not yet in the map, add it with logoUrl and an empty list of branches
+          groupedData[orgName] = {
+            "logoUrl": logoUrl,
+            "branches": []
+          };
+        }
+    
+        // Add the branch name to the organization's branch list
+        groupedData[orgName]?['branches'].add(branchName);
+      }
+    
+      organizations.value = groupedData;
+    
     });
   }
 

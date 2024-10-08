@@ -1,160 +1,209 @@
-import 'package:flutter/material.dart';
+import 'dart:math';
 
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:shongothon/flavors.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 import '../controllers/home_controller.dart';
 
 class HomeView extends GetView<HomeController> {
   HomeView({super.key});
 
+  final double defaultPadding = 16.0;
+
   final List<ItemData> items = [
     ItemData(Icons.home, 'Home'),
-    ItemData(Icons.favorite, 'Favorites'),
+    ItemData(Icons.message_rounded, 'Chat'),
     ItemData(Icons.settings, 'Settings'),
     ItemData(Icons.person, 'Profile'),
     ItemData(Icons.camera, 'Camera'),
-    // Add more items as needed
   ];
 
   @override
   Widget build(BuildContext context) {
-    const defaultPadding = 8.0;
     return Scaffold(
-      appBar: AppBar(
-              ),
-      body: SafeArea(
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+      backgroundColor: Colors.grey[200],
+      body: buildBody(),
+      bottomNavigationBar: buildBottomNav(),
+    );
+  }
+
+  Widget buildBody() {
+    return RefreshIndicator(
+      onRefresh: () async {
+        await controller.fetchData(); // Await if this function returns a Future
+      },
+      child: SafeArea(
+        child: Obx(
+          () => ListView(
             children: [
               Padding(
-                padding: const EdgeInsets.only(left: defaultPadding,top: 40,bottom: 40),
-                child: Text(
-                  'Shongothon',
-                  style: TextStyle(fontSize: 40, color: Colors.deepPurple),
-                ),
-              ),
-              SizedBox(
-                height: 20,
-              ),
-              Padding(
-                padding: const EdgeInsets.all(defaultPadding),
-                child: Text(
-                  'My Tools',
-                  style: TextStyle(fontSize: 15, fontWeight: FontWeight.w200),
-                ),
-              ),
-              SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: Row(
-                  children: items
-                      .map(
-                        (item) => Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Container(
-                            width: 100,
-                            height: 100,
-                            decoration: BoxDecoration(
-                                color: Colors.black12,
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(20))),
+                padding: EdgeInsets.symmetric(vertical: 10),
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        'Shongothon',
+                        style: GoogleFonts.abel(
+                            fontSize: 36,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.deepPurple),
+                      ),
+                      Row(
+                        children: [
+                          IconButton(
+                            icon: Icon(Icons.search),
+                            onPressed: () {},
                           ),
-                        ),
-                      )
-                      .toList(),
+                          SizedBox(width: 10),
+                          IconButton(
+                            onPressed: () {},
+                            icon: Icon(
+                              Icons.add,
+                              size: 30,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
               ),
-              SizedBox(
-                height: 20,
-              ),
-
               Padding(
-                padding: const EdgeInsets.all(8.0),
+                padding: EdgeInsets.all(defaultPadding),
                 child: Text(
-                  'Islami Chattra Andolan Bangladesh',
-                  style: TextStyle(fontSize: 15, fontWeight: FontWeight.w300),
+                  'Online Users',
+                  style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w400,
+                      color: Colors.grey[700]),
                 ),
               ),
-              ...items
-                  .map((item) => Padding(
-                        padding:
-                            const EdgeInsets.only(left: 25, top: 10, right: 10),
-                        child: Container(
-                          width: double.infinity,
-                          height: 100,
-                          decoration: BoxDecoration(
-                              color: Colors.black12,
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(20))),
-                        ),
-                      ))
-                  .toList(),            Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text(
-                  'Islami Andolan Bangladesh',
-                  style: TextStyle(fontSize: 15, fontWeight: FontWeight.w300),
-                ),
-              ),
-              ...items
-                  .map((item) => Padding(
-                        padding:
-                            const EdgeInsets.only(left: 25, top: 10, right: 10),
-                        child: Container(
-                          width: double.infinity,
-                          height: 100,
-                          decoration: BoxDecoration(
-                              color: Colors.black12,
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(20))),
-                        ),
-                      ))
-                  .toList(),
-              Obx(() => Column(
-                  children: controller.orgNames.map((f) => Text(f)).toList())),
+              buildOnlinePersons(),
+              SizedBox(height: 20),
+              ...controller.organizations.entries
+                  .map((organization) => buildOrgCard(organization))
+                  .toList()
             ],
           ),
         ),
       ),
     );
   }
-}
 
-class HorizontalGrid extends StatelessWidget {
-  final List<ItemData> items = [
-    ItemData(Icons.home, 'Home'),
-    ItemData(Icons.favorite, 'Favorites'),
-    ItemData(Icons.settings, 'Settings'),
-    ItemData(Icons.person, 'Profile'),
-    ItemData(Icons.camera, 'Camera'),
-    // Add more items as needed
-  ];
+  Widget buildOrgCard(MapEntry<dynamic, dynamic> organizationMap) {
+    print(organizationMap);
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 10.0),
+      child: Container(
+        width: double.infinity,
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(16),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.deepPurple.withOpacity(0.2),
+              blurRadius: 10,
+              spreadRadius: 2,
+              offset: Offset(0, 4),
+            ),
+          ],
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(20.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Center(
+                child: Container(
+                    height: 100,
+                    child: Image.network(organizationMap.value['logoUrl'])),
+              ),
+              SizedBox(height: 12),
+              Center(
+                child: Text(
+                  organizationMap.key,
+                  style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.black),
+                ),
+              ),
+              SizedBox(height: 20),
+              ...organizationMap.value['branches']
+                  .map((b) => buildBranchList(b))
+                  .toList()
+            ],
+          ),
+        ),
+      ),
+    );
+  }
 
-  @override
-  Widget build(BuildContext context) {
+  Widget buildBranchList(String branchName) {
+    return Card(
+      elevation: 0,
+      color: Colors.grey[100],
+      child: ListTile(
+        onTap: () {},
+        title: Text(branchName),
+        leading: Icon(Icons.location_city, color: Colors.deepPurple),
+      ),
+    );
+  }
+
+  SingleChildScrollView buildOnlinePersons() {
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
       child: Row(
-        children: items.map((item) {
-          return Container(
-            width: 100,
-            height: 100, // Adjust the width as needed
-            child: GridTile(
-              footer: Padding(
+        children: items
+            .map(
+              (item) => Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: Text(
-                  item.title,
-                  textAlign: TextAlign.center,
+                child: Container(
+                  width: 60,
+                  height: 60,
+                  decoration: BoxDecoration(
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.deepPurple.withOpacity(0.2),
+                        blurRadius: 10,
+                        spreadRadius: 2,
+                        offset: Offset(0, 3),
+                      ),
+                    ],
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(30),
+                  ),
+                  child: Icon(item.icon, size: 30, color: getRandomColor()),
                 ),
               ),
-              child: Icon(
-                item.icon,
-                size: 50,
-                color: Colors.blue,
-              ),
-            ),
-          );
-        }).toList(),
+            )
+            .toList(),
+      ),
+    );
+  }
+
+  Obx buildBottomNav() {
+    return Obx(
+      () => BottomNavigationBar(
+        currentIndex: controller.currentIndex.value,
+        onTap: (index) {
+          controller.currentIndex.value = index;
+        },
+        elevation: 20,
+        backgroundColor: Colors.deepPurple,
+        selectedItemColor: Colors.white,
+        unselectedItemColor: Colors.grey[400],
+        items: items
+            .map((item) => BottomNavigationBarItem(
+                  backgroundColor: Colors.deepPurple,
+                  icon: Icon(item.icon),
+                  label: item.title,
+                ))
+            .toList(),
       ),
     );
   }
@@ -165,4 +214,14 @@ class ItemData {
   final String title;
 
   ItemData(this.icon, this.title);
+}
+
+Color getRandomColor() {
+  Random random = Random();
+  return Color.fromARGB(
+    255,
+    random.nextInt(256),
+    random.nextInt(256),
+    random.nextInt(256),
+  );
 }

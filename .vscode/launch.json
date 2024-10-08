@@ -10,7 +10,9 @@
                 "--flavor",
                 "shongothon",
                 "--target",
-                "lib/main_shongothon.dart"
+                "lib/main_shongothon.dart",
+                "--web-browser-flag",
+                 "--disable-web-security"
             ]
         }
     ]
