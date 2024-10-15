@@ -10,6 +10,8 @@ import '../../pages/modules/report/bindings/report_binding.dart';
 import '../../pages/modules/report/views/report_view.dart';
 import '../../pages/signin/bindings/signin_binding.dart';
 import '../../pages/signin/views/signin_view.dart';
+import '../../pages/signup/bindings/signup_binding.dart';
+import '../../pages/signup/views/signup_view.dart';
 
 part 'app_routes.dart';
 
@@ -21,7 +23,7 @@ class AppPages {
   static final routes = [
     GetPage(
       name: _Paths.HOME,
-      page: () =>  HomeView(),
+      page: () => HomeView(),
       binding: HomeBinding(),
     ),
     GetPage(
@@ -43,6 +45,11 @@ class AppPages {
       name: _Paths.REPORT,
       page: () => const ReportView(),
       binding: ReportBinding(),
+    ),
+    GetPage(
+      name: _Paths.SIGNUP,
+      page: () => const SignupView(),
+      binding: SignupBinding(),
     ),
   ];
 }

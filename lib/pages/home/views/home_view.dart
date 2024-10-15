@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:shongothon/app/routes/app_pages.dart';
 
 import '../controllers/home_controller.dart';
 
@@ -16,7 +17,7 @@ class HomeView extends GetView<HomeController> {
     ItemData(Icons.message_rounded, 'Chat'),
     ItemData(Icons.settings, 'Settings'),
     ItemData(Icons.person, 'Profile'),
-    ItemData(Icons.camera, 'Camera'),
+    ItemData(Icons.logout, 'Logout'),
   ];
 
   @override
@@ -47,14 +48,15 @@ class HomeView extends GetView<HomeController> {
                       Text(
                         'Shongothon',
                         style: GoogleFonts.abel(
-                            fontSize: 36,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.deepPurple),
+                          fontSize: 36,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.blueAccent, // Updated color
+                        ),
                       ),
                       Row(
                         children: [
                           IconButton(
-                            icon: Icon(Icons.search),
+                            icon: Icon(Icons.search, color: Colors.grey),
                             onPressed: () {},
                           ),
                           SizedBox(width: 10),
@@ -63,6 +65,7 @@ class HomeView extends GetView<HomeController> {
                             icon: Icon(
                               Icons.add,
                               size: 30,
+                              color: Colors.blueAccent, // Updated color
                             ),
                           ),
                         ],
@@ -71,17 +74,18 @@ class HomeView extends GetView<HomeController> {
                   ),
                 ),
               ),
-              Padding(
-                padding: EdgeInsets.all(defaultPadding),
-                child: Text(
-                  'Online Users',
-                  style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w400,
-                      color: Colors.grey[700]),
-                ),
-              ),
-              buildOnlinePersons(),
+              // Padding(
+              //   padding: EdgeInsets.all(defaultPadding),
+              //   child: Text(
+              //     'Online Users',
+              //     style: TextStyle(
+              //       fontSize: 16,
+              //       fontWeight: FontWeight.w400,
+              //       color: Colors.grey[700],
+              //     ),
+              //   ),
+              // ),
+              // buildOnlinePersons(),
               SizedBox(height: 20),
               ...controller.organizations.entries
                   .map((organization) => buildOrgCard(organization))
@@ -94,7 +98,6 @@ class HomeView extends GetView<HomeController> {
   }
 
   Widget buildOrgCard(MapEntry<dynamic, dynamic> organizationMap) {
-    print(organizationMap);
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 10.0),
       child: Container(
@@ -104,7 +107,7 @@ class HomeView extends GetView<HomeController> {
           borderRadius: BorderRadius.circular(16),
           boxShadow: [
             BoxShadow(
-              color: Colors.deepPurple.withOpacity(0.2),
+              color: Colors.blueAccent.withOpacity(0.2),
               blurRadius: 10,
               spreadRadius: 2,
               offset: Offset(0, 4),
@@ -126,9 +129,10 @@ class HomeView extends GetView<HomeController> {
                 child: Text(
                   organizationMap.key,
                   style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.w600,
-                      color: Colors.black),
+                    fontSize: 20,
+                    fontWeight: FontWeight.w600,
+                    color: Colors.black,
+                  ),
                 ),
               ),
               SizedBox(height: 20),
@@ -149,7 +153,7 @@ class HomeView extends GetView<HomeController> {
       child: ListTile(
         onTap: () {},
         title: Text(branchName),
-        leading: Icon(Icons.location_city, color: Colors.deepPurple),
+        leading: Icon(Icons.location_city, color: Colors.blueAccent),
       ),
     );
   }
@@ -168,7 +172,7 @@ class HomeView extends GetView<HomeController> {
                   decoration: BoxDecoration(
                     boxShadow: [
                       BoxShadow(
-                        color: Colors.deepPurple.withOpacity(0.2),
+                        color: Colors.blueAccent.withOpacity(0.2),
                         blurRadius: 10,
                         spreadRadius: 2,
                         offset: Offset(0, 3),
@@ -192,14 +196,16 @@ class HomeView extends GetView<HomeController> {
         currentIndex: controller.currentIndex.value,
         onTap: (index) {
           controller.currentIndex.value = index;
+          if (index == 4) {
+            Get.offAllNamed(Routes.SIGNIN);
+          }
         },
         elevation: 20,
-        backgroundColor: Colors.deepPurple,
-        selectedItemColor: Colors.white,
+        backgroundColor: Colors.white, // Lighter background
+        selectedItemColor: Colors.blueAccent, // Updated color
         unselectedItemColor: Colors.grey[400],
         items: items
             .map((item) => BottomNavigationBarItem(
-                  backgroundColor: Colors.deepPurple,
                   icon: Icon(item.icon),
                   label: item.title,
                 ))

@@ -8,6 +8,7 @@ abstract class Routes {
   static const MODULE_LIST = _Paths.PAGES + _Paths.MODULE_LIST;
   static const COMMITTEE = _Paths.PAGES + _Paths.COMMITTEE;
   static const REPORT = _Paths.PAGES + _Paths.REPORT;
+  static const SIGNUP = _Paths.PAGES + _Paths.SIGNUP;
 }
 
 abstract class _Paths {
@@ -18,4 +19,5 @@ abstract class _Paths {
   static const PAGES = '/module';
   static const COMMITTEE = '/committee';
   static const REPORT = '/report';
+  static const SIGNUP = '/signup';
 }
