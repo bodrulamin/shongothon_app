@@ -8,7 +8,7 @@ import 'package:getwidget/components/loader/gf_loader.dart';
 import 'package:getwidget/shape/gf_button_shape.dart';
 import 'package:getwidget/size/gf_size.dart';
 import 'package:getwidget/types/gf_loader_type.dart';
-import 'package:shongothon/app/data/auth_service.dart';
+import 'package:shongothon/app/data/api/api_service.dart';
 import 'package:shongothon/app/routes/app_pages.dart';
 
 import '../controllers/signin_controller.dart';

@@ -1,5 +1,5 @@
 import 'package:get/get.dart';
-import 'package:shongothon/app/data/auth_service.dart';
+import 'package:shongothon/app/data/api/api_service.dart';
 
 class HomeController extends GetxController {
   //TODO: Implement HomeController
@@ -18,11 +18,7 @@ class HomeController extends GetxController {
   Future<void> fetchData() async {
     organizations.value = {}.obs;
 
-    var response = await Get.find<ApiService>().fetchAccount();
-    var account = response.body;
-    var id = account['id'];
-    
-    Get.find<ApiService>().fetchUsergroups(id.toString()).then((response) {
+    Get.find<ApiService>().fetchMyBranches().then((response) {
       
       var userGroups = response.body.map((data) {
         var userGroupName = data['userGroup']['name'];
