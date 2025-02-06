@@ -25,6 +25,8 @@ class ApiClient extends GetConnect {
     });
     httpClient.addRequestModifier<dynamic>((request) {
       request.headers['Content-Security-Policy'] = 'default-src \'self\'; frame-src \'self\' data:; script-src \'self\' \'unsafe-inline\' \'unsafe-eval\' https://storage.googleapis.com; style-src \'self\' https://fonts.googleapis.com \'unsafe-inline\'; img-src \'self\' data:; font-src \'self\' https://fonts.gstatic.com data:;';
+      request.headers['Authorization'] ='Bearer $token';
+
       Get.showOverlay(
         asyncFunction: () async => request,
         loadingWidget: Center(child: CircularProgressIndicator()),
