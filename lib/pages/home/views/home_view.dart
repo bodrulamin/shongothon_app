@@ -6,6 +6,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:shongothon/app/data/model/allowed_branch.dart';
 import 'package:shongothon/app/routes/app_pages.dart';
 
+import '../../../app/data/model/branch.dart';
 import '../controllers/home_controller.dart';
 
 class HomeView extends GetView<HomeController> {
@@ -156,7 +157,7 @@ class HomeView extends GetView<HomeController> {
         onTap: () => controller.onBranchTap(branch),
         child: ListTile(
           title: Text(branch.name),
-          leading: Icon(Icons.location_city, color: Colors.blueAccent),
+          leading: const Icon(Icons.location_city, color: Colors.blueAccent),
         ),
       ),
     );

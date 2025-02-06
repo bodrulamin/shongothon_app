@@ -3,9 +3,9 @@ import 'package:shongothon/app/data/api/api_service.dart';
 import 'package:shongothon/app/data/model/allowed_branch.dart';
 import 'package:shongothon/app/routes/app_pages.dart';
 
-class HomeController extends GetxController {
-  //TODO: Implement HomeController
+import '../../../app/data/model/branch.dart';
 
+class HomeController extends GetxController {
   final count = 0.obs;
 
   var allowedBranches = <AllowedBranch>[].obs;
@@ -20,15 +20,9 @@ class HomeController extends GetxController {
     allowedBranches.value = [];
 
     Get.find<ApiService>().fetchMyBranches().then((response) {
-      if (response.body is List) {
-        List<AllowedBranch> branchList = (response.body as List)
-            .map((item) => AllowedBranch.fromJson(item))
-            .toList();
-        allowedBranches.value = branchList;
-      } else {
-        print("Unexpected response format: ${response.body}");
-      }
-    });    @override
+        allowedBranches.value = response;
+    });
+    @override
     void onReady() {
       super.onReady();
     }
@@ -43,6 +37,9 @@ class HomeController extends GetxController {
 
   onBranchTap(Branch branch) {
     print("object");
-    Get.toNamed(Routes.COMMITTEE_LIST);
+    Get.toNamed(
+        Routes.COMMITTEE_LIST,
+        arguments: branch,
+        parameters: {'branchId': branch.id.toString()});
   }
 }
