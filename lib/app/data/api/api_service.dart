@@ -21,16 +21,16 @@ class ApiService extends GetxService {
   Future<void> signInWithUsernamePassword(String username, String password) async {
     final response = await apiClient.post(authenticate,{'username': username, 'password': password});
 
-      if (response.statusCode == HttpStatus.ok) {
-        var token = response.body['id_token'];
-        box.write('token', token);
-        apiClient.updateToken(token);
-        Get.offAllNamed(Routes.HOME);
-      } else {
-        print('unauthorized');
-        Get.snackbar('Error', 'Authentication unsuccessful');
-        GFToast.showToast('text', Get.context!);
-      }
+    if (response.statusCode == HttpStatus.ok) {
+      var token = response.body['id_token'];
+      box.write('token', token);
+      apiClient.updateToken(token);
+      Get.offAllNamed(Routes.HOME);
+    } else {
+      print('unauthorized');
+      Get.snackbar('Error', 'Authentication unsuccessful');
+      GFToast.showToast('text', Get.context!);
+    }
 
     return Future.value('');
   }

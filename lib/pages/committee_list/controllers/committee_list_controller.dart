@@ -1,7 +1,7 @@
 import 'package:get/get.dart';
 
-class ModuleListController extends GetxController {
-  //TODO: Implement ModuleListController
+class CommitteeListController extends GetxController {
+  //TODO: Implement CommitteeListController
 
   final count = 0.obs;
   @override

@@ -6,18 +6,19 @@ abstract class Routes {
   static const HOME = _Paths.HOME;
   static const SIGNIN = _Paths.SIGNIN;
   static const MODULE_LIST = _Paths.PAGES + _Paths.MODULE_LIST;
-  static const COMMITTEE = _Paths.PAGES + _Paths.COMMITTEE;
   static const REPORT = _Paths.PAGES + _Paths.REPORT;
   static const SIGNUP = _Paths.PAGES + _Paths.SIGNUP;
+  static const COMMITTEE_LIST = _Paths.PAGES + _Paths.COMMITTEE_LIST;
 }
 
 abstract class _Paths {
   _Paths._();
+  static const PAGES = '';
   static const HOME = '/home';
   static const SIGNIN = '/signin';
   static const MODULE_LIST = '/module-list';
-  static const PAGES = '/module';
   static const COMMITTEE = '/committee';
   static const REPORT = '/report';
   static const SIGNUP = '/signup';
+  static const COMMITTEE_LIST = '/committee-list';
 }

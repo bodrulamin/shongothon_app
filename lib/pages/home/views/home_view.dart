@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:shongothon/app/data/model/allowed_branch.dart';
 import 'package:shongothon/app/routes/app_pages.dart';
 
 import '../controllers/home_controller.dart';
@@ -36,7 +37,7 @@ class HomeView extends GetView<HomeController> {
       },
       child: SafeArea(
         child: Obx(
-          () => ListView(
+              () => ListView(
             children: [
               Padding(
                 padding: EdgeInsets.symmetric(vertical: 10),
@@ -74,21 +75,12 @@ class HomeView extends GetView<HomeController> {
                   ),
                 ),
               ),
-              // Padding(
-              //   padding: EdgeInsets.all(defaultPadding),
-              //   child: Text(
-              //     'Online Users',
-              //     style: TextStyle(
-              //       fontSize: 16,
-              //       fontWeight: FontWeight.w400,
-              //       color: Colors.grey[700],
-              //     ),
-              //   ),
-              // ),
-              // buildOnlinePersons(),
               SizedBox(height: 20),
-              ...controller.organizations.entries
-                  .map((organization) => buildOrgCard(organization))
+              Obx(() =>
+              controller.allowedBranches.value.isNotEmpty ?
+              ElevatedButton(onPressed: controller.fetchData, child: Text("Refresh")): SizedBox()),
+              ...controller.allowedBranches
+                  .map((allowedBranch) => buildOrgCard(allowedBranch))
                   .toList()
             ],
           ),
@@ -97,7 +89,7 @@ class HomeView extends GetView<HomeController> {
     );
   }
 
-  Widget buildOrgCard(MapEntry<dynamic, dynamic> organizationMap) {
+  Widget buildOrgCard(AllowedBranch allowedBranch) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 10.0),
       child: Container(
@@ -119,15 +111,25 @@ class HomeView extends GetView<HomeController> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Center(
-                child: Container(
-                    height: 100,
-                    child: Image.network(organizationMap.value['logoUrl'])),
-              ),
-              SizedBox(height: 12),
+              if (allowedBranch.organization.logoUrl.isNotEmpty)
+
+                Center(
+                  child: Container(
+                      height: 100,
+                      child: Image.network(allowedBranch.organization.logoUrl)),
+                ),
+              if (allowedBranch.organization.typographyUrl.isNotEmpty)
+                Center(
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: SizedBox(
+                        height: 40,
+                        child: Image.network(allowedBranch.organization.typographyUrl)),
+                  ),
+                ),
               Center(
                 child: Text(
-                  organizationMap.key,
+                  allowedBranch.organization.name,
                   style: TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.w600,
@@ -136,7 +138,7 @@ class HomeView extends GetView<HomeController> {
                 ),
               ),
               SizedBox(height: 20),
-              ...organizationMap.value['branches']
+              ...allowedBranch.branches
                   .map((b) => buildBranchList(b))
                   .toList()
             ],
@@ -146,18 +148,19 @@ class HomeView extends GetView<HomeController> {
     );
   }
 
-  Widget buildBranchList(String branchName) {
+  Widget buildBranchList(Branch branch) {
     return Card(
       elevation: 0,
       color: Colors.grey[100],
-      child: ListTile(
-        onTap: () {},
-        title: Text(branchName),
-        leading: Icon(Icons.location_city, color: Colors.blueAccent),
+      child: InkWell( // Ensures tap is registered
+        onTap: () => controller.onBranchTap(branch),
+        child: ListTile(
+          title: Text(branch.name),
+          leading: Icon(Icons.location_city, color: Colors.blueAccent),
+        ),
       ),
     );
   }
-
   SingleChildScrollView buildOnlinePersons() {
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
@@ -165,26 +168,26 @@ class HomeView extends GetView<HomeController> {
         children: items
             .map(
               (item) => Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Container(
-                  width: 60,
-                  height: 60,
-                  decoration: BoxDecoration(
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.blueAccent.withOpacity(0.2),
-                        blurRadius: 10,
-                        spreadRadius: 2,
-                        offset: Offset(0, 3),
-                      ),
-                    ],
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(30),
+            padding: const EdgeInsets.all(8.0),
+            child: Container(
+              width: 60,
+              height: 60,
+              decoration: BoxDecoration(
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.blueAccent.withOpacity(0.2),
+                    blurRadius: 10,
+                    spreadRadius: 2,
+                    offset: Offset(0, 3),
                   ),
-                  child: Icon(item.icon, size: 30, color: getRandomColor()),
-                ),
+                ],
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(30),
               ),
-            )
+              child: Icon(item.icon, size: 30, color: getRandomColor()),
+            ),
+          ),
+        )
             .toList(),
       ),
     );
@@ -192,7 +195,7 @@ class HomeView extends GetView<HomeController> {
 
   Obx buildBottomNav() {
     return Obx(
-      () => BottomNavigationBar(
+          () => BottomNavigationBar(
         currentIndex: controller.currentIndex.value,
         onTap: (index) {
           controller.currentIndex.value = index;
@@ -201,14 +204,16 @@ class HomeView extends GetView<HomeController> {
           }
         },
         elevation: 20,
-        backgroundColor: Colors.white, // Lighter background
-        selectedItemColor: Colors.blueAccent, // Updated color
+        backgroundColor: Colors.white,
+        // Lighter background
+        selectedItemColor: Colors.blueAccent,
+        // Updated color
         unselectedItemColor: Colors.grey[400],
         items: items
             .map((item) => BottomNavigationBarItem(
-                  icon: Icon(item.icon),
-                  label: item.title,
-                ))
+          icon: Icon(item.icon),
+          label: item.title,
+        ))
             .toList(),
       ),
     );

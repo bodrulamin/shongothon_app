@@ -1,5 +1,9 @@
 import 'package:get/get.dart';
 
+import '../../pages/committee_list/bindings/committee_list_binding.dart';
+import '../../pages/committee_list/bindings/committee_list_binding.dart';
+import '../../pages/committee_list/views/committee_list_view.dart';
+import '../../pages/committee_list/views/committee_list_view.dart';
 import '../../pages/home/bindings/home_binding.dart';
 import '../../pages/home/views/home_view.dart';
 import '../../pages/module_list/bindings/module_list_binding.dart';
@@ -50,6 +54,18 @@ class AppPages {
       name: _Paths.SIGNUP,
       page: () => const SignupView(),
       binding: SignupBinding(),
+    ),
+    GetPage(
+      name: _Paths.COMMITTEE_LIST,
+      page: () => const CommitteeListView(),
+      binding: CommitteeListBinding(),
+      children: [
+        GetPage(
+          name: _Paths.COMMITTEE_LIST,
+          page: () => const CommitteeListView(),
+          binding: CommitteeListBinding(),
+        ),
+      ],
     ),
   ];
 }
