@@ -3,6 +3,10 @@ class Endpoints {
   // Authentication
   static const String authenticate = '/api/authenticate';
 
+
+  // Authentication
+  static const String register = '/api/register';
+
   // User Account
   static const String account = '/api/account';
 
