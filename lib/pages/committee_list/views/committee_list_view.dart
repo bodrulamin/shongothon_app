@@ -10,7 +10,7 @@ class CommitteeListView extends GetView<CommitteeListController> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('CommitteeListView'),
+       title: Obx(()=> controller.branch.value != null ? Text(controller.branch.value!.name) :  Text('alksdjlfjasd') ),
         centerTitle: true,
       ),
       body: const Center(

@@ -39,7 +39,6 @@ class HomeController extends GetxController {
     print("object");
     Get.toNamed(
         Routes.COMMITTEE_LIST,
-        arguments: branch,
-        parameters: {'branchId': branch.id.toString()});
+        arguments: branch);
   }
 }

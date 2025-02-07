@@ -1,8 +1,9 @@
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:shongothon/app/data/model/committee.dart';
+import 'package:shongothon/app/routes/app_pages.dart';
 
 import '../../../app/data/api/api_service.dart';
-import '../../../app/data/model/allowed_branch.dart';
 import '../../../app/data/model/branch.dart';
 
 class CommitteeListController extends GetxController {
@@ -13,20 +14,20 @@ class CommitteeListController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    if (Get.arguments != null) {
-      branch.value = Get.arguments;
-    } else {
-      var branchId = Get.parameters['branchId'];
-      if (branchId != null) {
-        fetchBranchInfo(branchId);
-        fetchCommitteeByBranchId(branchId);
-      }
-    }
+
   }
 
   @override
   void onReady() {
     super.onReady();
+    if (Get.arguments != null) {
+      branch.value = Get.arguments;
+      var branchId = branch.value?.id.toString();
+      fetchBranchInfo(branchId!);
+      fetchCommitteeByBranchId(branchId);
+    } else {
+        Get.toNamed(Routes.HOME);
+    }
   }
 
   @override

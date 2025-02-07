@@ -17,8 +17,7 @@ abstract class _Paths {
   static const HOME = '/home';
   static const SIGNIN = '/signin';
   static const MODULE_LIST = '/module-list';
-  static const COMMITTEE = '/committee.dart';
   static const REPORT = '/report';
   static const SIGNUP = '/signup';
-  static const COMMITTEE_LIST = '/committee.dart-list';
+  static const COMMITTEE_LIST = '/committee-list';
 }
